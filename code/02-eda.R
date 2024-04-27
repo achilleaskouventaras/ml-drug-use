@@ -14,10 +14,11 @@ pairs(train[,c(6:10)], pch = 20, lower.panel = NULL) #focus on scores
 #there seem to be some linear relationships between pairs of variables
 
 #looking into correlations
-m <- cor(train[,c(2:13)]);corrplot(m, method = "number", type = "upper") #calculate correlation matrix and plot correlogram
+m <- cor(train[,c(2:13)]);corrplot(m, method = "number", type = "upper", diag = F) #calculate correlation matrix and plot correlogram
 #strong correlation (0.63) between Impulsive and SS
 #other correlations in the weak and moderate range
-#some dimension reduction might be possible
+#this suggest that there is some degree of redundancy in the information between the variables
+#and therefore, some dimension reduction might be possible
 
 #looking into variances
 round(diag(var(train[, c(2:13)])),2) #variances
