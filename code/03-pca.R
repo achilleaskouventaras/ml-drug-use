@@ -1,7 +1,5 @@
 #lets explore the potential for dimension reduction
 
-#load libraries
-
 #firstly, we can perform some basic variable selection
 head(train, 5) #variable X can be dropped
 df <- train[,c(2:13)] #create a new data frame to work with (X is dropped)
