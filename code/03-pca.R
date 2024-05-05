@@ -1,4 +1,7 @@
+
 #lets explore the potential for dimension reduction
+
+train <- read.csv("data/patient-data-train.csv") #read train data
 
 #firstly, we can perform some basic variable selection
 head(train, 5) #variable X can be dropped
@@ -67,3 +70,44 @@ ave.var #0.752
 
 #To which components that have higher than average variance (TRUE)
 sd.pca^2 > ave.var #We would retain the first 3 PCs.
+
+
+#### Loadings ####
+
+#Lets stick with Kaiser's method (keep first 4 components).
+
+#Lets see if there is any interpretation that can be attached to the loadings 
+#of the PCA for our patient data. 
+#To do that, we extract the loadings (or rotation) matrix from the fitted object.
+df.pca$loadings[, 1:4]
+
+#Interpreting these can be something of an art. 
+#We look at each column in turn, look for variables with reasonably large positive values, 
+#group them together and then look for variables with reasonably large negative values and group them together. 
+#The PC is interpreted as being the contrast between these groups of variables. 
+#If all variables of reasonable size loading have the same sign 
+#then that PC is interpreted as the (weighted) average or overall score of these variables.
+#Βlanks indicate zeros, i.e. variables with no weight in that particular component. 
+
+#For Component 1,  We can see that there are two sets of variables with reasonable size weights here, 
+#ones with pluses and ones with minuses so, 
+#we would interpret this component as the difference between 
+#the average of Age, Education, Country, Ascore, and Cscore
+#and the average of Nscore, Oscore, Impulsive, SS, and Class
+#We can do the same with all other components that we have decided to retain.
+
+#We are usually interested in examining what the data look like in the new reduced space.
+#The scores for the PCs on the original data are automatically produced by princomp. 
+#So we can look at the pairs plot of the PCs we decided to retain.
+scores.train <- df.pca$scores[, 1:4]
+pairs(scores.train, pch = 20, lower.panel = NULL)
+
+#In the new space our data look like a cloud of points that no longer 
+#follow a line but just look like a random scatter of points centered at
+#the origin (0,0) in the new space. PCs are uncorrelated (scattered points don't concentrate along the diagonals)
+#For the most part, it Looks like the data describe a single homogeneous population.
+#There may also be a few of outliers. 
+#We could iterate this process by removing the outliers from the data and running PCA again. 
+#Often PCA is an iterative process, rather than a one and done kind of deal.
+
+
