@@ -111,3 +111,58 @@ pairs(scores.train, pch = 20, lower.panel = NULL)
 #Often PCA is an iterative process, rather than a one and done kind of deal.
 
 
+#### Biplots ####
+
+#Unlike regular plots with one axis pair, biplots have two sets. 
+
+#The first set (usually the left-most and bottom vertical and horizontal axes) 
+#shows principal component (PC) scores for subjects.
+#The second set (usually the right most and top vertical and horizontal axes) 
+#displays variable loadings on PCs. 
+#These are visualized by arrows originating from the plot center, 
+#with lengths proportional to the variable's weight on each PC.
+
+biplot(df.pca, xlim = c(-0.15, 0.15)) #biplot
+#We see no clear evidence of outliers in this representation. 
+
+#By default, biplot has used the rownames of the dataset as labels for the points. 
+#This makes the plot a bit cluttered so we’ll take this information out using the xlabs argument.
+biplot(df.pca, xlim = c(-0.15, 0.15), xlabs = rep("*", nrow(train)), choices = c(1, 2))
+
+
+#library(devtools)
+#install_github("vqv/ggbiplot")
+#library(ggbiplot)
+#ggbiplot(df.pca, choices = 1:2, circle = T)
+
+biplot(df.pca,xlabs = rep("*", nrow(train)), xlim= c(-0.15, 0.15),
+       cex = c(1, 0.8), arrow.len = 0.05)
+abline(v = 0, lty = 3); abline(h = 0, lty = 3)
+
+
+# Key points about interpreting biplots:
+
+  
+  "# 1. Vector Length and Variation:
+  * The **length** of a variable's vector on the biplot reflects the **relative variation** 
+  of that variable explained by the principal components. 
+  * Longer vectors indicate the variable contributes more to the variation captured 
+  in the PCs.
+
+  # 2. Vector Angle and Variable Relationship:
+  * The **angle** between two variable vectors tells us about their **relationship**.
+  * Close to **0 degrees** (vectors pointing in the same direction) indicates a **strong positive correlation**. 
+  * Close to **90 degrees** (vectors perpendicular) suggests **no correlation**.
+  * Close to **180 degrees** (vectors pointing in opposite directions) indicates a **strong negative correlation**.
+
+  # 3. Vector Position and Influence on PC:
+  * The position and **length** of a variable vector relative to a PC axis reflects its **influence** 
+  on that particular PC.
+  * Longer vectors pointing towards a PC axis have a **greater influence** on that PC.
+
+  # Reminder about cosine values and correlation strength:
+  * Cosine of the angle (denoted as cos(angle)) helps quantify the correlation strength.
+  * cos(0°) = 1: Strongly positive correlation (closer vectors, stronger positive correlation)
+  * cos(90°) = 0: No correlation (vectors close to perpendicular)
+  * cos(180°) = -1: Strongly negative correlation (vectors in opposite directions, stronger negative correlation)"
+  
