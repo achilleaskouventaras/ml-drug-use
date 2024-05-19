@@ -1,6 +1,6 @@
 #load libraries using pacman
 #install.packages("pacman")
-pacman::p_load(tidyverse, skimr, corrplot)
+pacman::p_load(tidyverse, skimr, corrplot, ggplot2, GGally)
 
 train <- read.csv("data/patient-data-train.csv") #read train data
 
@@ -13,9 +13,24 @@ pairs(train[,c(6:10)], pch = 20, lower.panel = NULL) #focus on scores
 #scatter plots did not reveal any obvious outliers 
 #there seem to be some linear relationships between pairs of variables
 
+#lets refine the graph
+#Coloring plots by Class helps identify potential outliers
+ggpairs(train[, c(6:10)], ggplot2::aes(colour = factor(train$Class))) #using ggplot2 and GGally
+#using standard pairs function
+pairs(train[,c(6:10)], #main = "Title",
+      pch = 21, bg = c("red", "blue")[factor(train$Class)],
+      lower.panel = NULL)
+
+#identify possible outliers 
+#plot(train$Nscore, train$Escore, xlab = "Nscore", ylab = "Cscore",
+#     pch = 21, bg = c("red", "blue")[factor(train$Class)])
+#identify outliers
+#outlier <- identify(cbind(train$Nscore, train$Cscore))
+#probably do this with box plots
+
 #looking into correlations
 m <- cor(train[,c(2:13)]);corrplot(m, method = "number", type = "upper", diag = F) #calculate correlation matrix and plot correlogram
-#strong correlation (0.63) between Impulsive and SS
+#strong correlation (0.63) between Impvulsive and SS
 #other correlations in the weak and moderate range
 #this suggest that there is some degree of redundancy in the information between the variables
 #and therefore, some dimension reduction might be possible
